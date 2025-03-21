@@ -1,5 +1,5 @@
 ## Clone this template
 
 ```bash
-npx gitpick@latest nrjdalal/starter
+npx gitpick@latest nrjdalal/the-typescript-starter
 ```
