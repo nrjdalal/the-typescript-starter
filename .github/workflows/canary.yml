@@ -1,4 +1,4 @@
-name: Release Canary
+name: Release Canary Workflow
 
 on:
   push:
@@ -37,26 +37,26 @@ jobs:
       - name: Build
         run: bun run build
 
-      - name: Publish Packages
+      - name: Release Canary If Package Exists
         run: |
-          # Check if package exists in npm registry
+          # --- Check if package exists in npm registry ---
           package_name=$(bunx json -f package.json -a name)
           npm view "$package_name" 2>/dev/null || {
             echo "$package_name does not exist in the npm registry. Skipping publish."
             exit 0
           }
-          # Release canary version
-          current_version=$(bunx json -f package.json -a version)
-          IFS='.' read -r major minor patch <<<"$current_version"
-          future_latest="$major.$((minor + 1)).0"
+          # --- Determine and release the next canary version ---
+          current_latest=$(bunx json -f package.json -a version)
+          IFS='.' read -r major minor patch <<<"$current_latest"
+          upcoming_minor="$major.$((minor + 1)).0"
           current_canary=$(npm view "$package_name" dist-tags.canary 2>/dev/null)
           if [ -z "$current_canary" ]; then
-            future_canary="$future_latest-canary.0"
+            release_version="$upcoming_minor-canary.0"
           else
             IFS='.-' read -r canary_major canary_minor canary_patch canary_tag canary_version <<<"$current_canary"
-            future_canary="$canary_major.$canary_minor.$canary_patch-canary.$((canary_version + 1))"
+            release_version="$canary_major.$canary_minor.$canary_patch-canary.$((canary_version + 1))"
           fi
-          bunx json -I -f package.json -e "this.version=\"$future_canary\""
+          bunx json -I -f package.json -e "this.version=\"$release_version\""
           bun publish --provenance --access public --tag canary
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
