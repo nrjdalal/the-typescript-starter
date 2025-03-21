@@ -1,4 +1,4 @@
-name: Release
+name: Release Canary
 
 on:
   push:
@@ -9,11 +9,10 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   id-token: write
-  contents: write
 
 jobs:
   release:
-    name: Release
+    name: Release Canary
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
