@@ -62,7 +62,7 @@ jobs:
           curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
-            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
             -d "{\"state\": \"success\", \"description\": \"Released $release_version to the canary channel.\"}"
         env:
