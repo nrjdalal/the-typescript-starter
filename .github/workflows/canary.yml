@@ -10,7 +10,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 permissions:
   id-token: write
   contents: write
-  statuses: write
 
 jobs:
   release:
@@ -65,7 +64,7 @@ jobs:
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/statuses" \
-            -d "{\"state\":\"success\",\"context\":\"release-canary\",\"description\":\"Released $release_version as a canary version.\"}"
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments" \
+            -d "{\"body\": \"Released $release_version as a canary version.\"}"
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
