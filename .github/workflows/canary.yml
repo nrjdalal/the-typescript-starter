@@ -14,7 +14,6 @@ permissions:
 
 jobs:
   release:
-    name: Release Canary
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -67,12 +66,12 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments" \
-            -d "{\"body\": \"Released [\`$package_name@$release_version\`]($package_url) as a canary version.\"}"
+            -d "{\"body\": \"Released [\`$package_name@$release_version\`]($package_url)\"}"
             curl -L \
             -X POST \
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA" \
-            -d "{\"state\": \"success\", \"context\": \"Released $package_name@$release_version\", \"target_url\": \"$package_url\"}"
+            -d "{\"state\": \"success\", \"context\": \"Package released\", \"description\": \"$package_name@$release_version\", \"target_url\": \"$package_url\"}"
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
