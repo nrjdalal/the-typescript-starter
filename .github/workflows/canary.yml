@@ -58,5 +58,11 @@ jobs:
           fi
           bunx json -I -f package.json -e "this.version=\"$release_version\""
           bun publish --provenance --access public --tag canary
+          # --- Add status of the release to the commit that triggered this workflow ---
+          curl -X POST -
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+            -H "Accept: application/vnd.github.v3+json"
+            -d "{\"state\": \"success\", \"description\": \"Released $release_version to the canary channel.\"}"
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/statuses/$GITHUB_SHA"
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
