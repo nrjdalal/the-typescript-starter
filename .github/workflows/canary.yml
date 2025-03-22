@@ -65,6 +65,6 @@ jobs:
             -H "Accept: application/vnd.github+json" \
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/statuses" \
-            -d "{\"body\":\"Released $release_version as a canary version.\"}"
+            -d "{\"state\":\"success\",\"context\":\"release-canary\",\"description\":\"Released $release_version as a canary version.\"}"
         env:
           NPM_CONFIG_TOKEN: ${{ secrets.NPM_TOKEN }}
