@@ -1,4 +1,4 @@
-name: Release Canary Workflow
+name: Release Canary
 
 on:
   push:
