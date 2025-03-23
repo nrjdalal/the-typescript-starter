@@ -34,27 +34,20 @@ jobs:
 
       - name: Release Package
         run: |
-          PACKAGE_NAME=$($RUNNER json -f package.json -a name)
+          npm i -g @antfu/ni
+
+          PACKAGE_NAME=$(nlx json -f package.json -a name)
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
-          LATEST_VERSION=$(echo $VERSIONS | $RUNNER json latest)
-          NEXT_VERSION=$($RUNNER semver $LATEST_VERSION -i minor)
-          TAGGED_VERSION=$(echo $VERSIONS | $RUNNER json $TAG)
-          NEXT_VERSION=$(if [[ $TAGGED_VERSION == $NEXT_VERSION* ]]; then $RUNNER semver $TAGGED_VERSION -i prerelease; else echo $NEXT_VERSION-$TAG.0; fi)
-          $RUNNER json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
+          LATEST_VERSION=$(echo $VERSIONS | nlx json latest)
+          NEXT_VERSION=$(nlx semver $LATEST_VERSION -i minor)
+          TAGGED_VERSION=$(echo $VERSIONS | nlx json $TAG)
+          NEXT_VERSION=$(if [[ $TAGGED_VERSION == $NEXT_VERSION* ]]; then nlx semver $TAGGED_VERSION -i prerelease; else echo $NEXT_VERSION-$TAG.0; fi)
+          nlx json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
 
-          # Install dependencies and build package
-          [ ! -d "node_modules" ] && $MANAGER install --frozen-lockfile
-          [[ "$BUILD" = "true" ]] && $MANAGER run build
-
-          # Publish package
-          # if [ "$MANAGER" = "bun" ]; then
+          [ ! -d "node_modules" ] && ni --frozen
+          [[ "$BUILD" = "true" ]] && nr build
           npm publish --provenance --access public --no-git-checks --tag $TAG
-          # else
-          #   $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
-          # fi
         env:
           TAG: canary
           BUILD: true
-          MANAGER: bun
-          RUNNER: bunx
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
