@@ -21,14 +21,27 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Smart NPM Release
-        uses: nrjdalal/smart-npm-release@v1.3.0-alpha.7
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          TAG: canary
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          node-version: lts/*
+          registry-url: https://registry.npmjs.org
 
-      - name: Changelogithub
-        run: npx changelogithub
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Release Package
+        run: |
+          TAG="canary"
+          MANAGER="bun"
+          RUNNER="bunx"
+          PACKAGE_NAME=$($RUNNER json -f package.json -a name)
+          VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
+          LATEST_VERSION=$(echo $VERSIONS | $RUNNER json latest)
+          NEXT_VERSION=$($RUNNER semver $LATEST_VERSION -i minor)
+          TAGGED_VERSION=$(echo $VERSIONS | $RUNNER json $TAG)
+          NEXT_VERSION=$(if [[ $TAGGED_VERSION == $NEXT_VERSION* ]]; then $RUNNER semver $TAGGED_VERSION -i prerelease; else echo $NEXT_VERSION-$TAG.0; fi)
+          $RUNNER json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
+          [[ "$MANAGER" = "bun" ]] && npm publish --provenance --access public --no-git-checks --tag $TAG || $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
