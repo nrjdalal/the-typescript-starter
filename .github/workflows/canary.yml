@@ -37,6 +37,8 @@ jobs:
           TAG="canary"
           MANAGER="bun"
           RUNNER="bunx"
+          BUILD="true"
+
           PACKAGE_NAME=$($RUNNER json -f package.json -a name)
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
           LATEST_VERSION=$(echo $VERSIONS | $RUNNER json latest)
@@ -44,4 +46,6 @@ jobs:
           TAGGED_VERSION=$(echo $VERSIONS | $RUNNER json $TAG)
           NEXT_VERSION=$(if [[ $TAGGED_VERSION == $NEXT_VERSION* ]]; then $RUNNER semver $TAGGED_VERSION -i prerelease; else echo $NEXT_VERSION-$TAG.0; fi)
           $RUNNER json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
+          [ ! -d "node_modules" ] && $MANAGER install --frozen-lockfile
+          [[ "$BUILD" = "true" ]] && $MANAGER run build
           [[ "$MANAGER" = "bun" ]] && npm publish --provenance --access public --no-git-checks --tag $TAG || $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
