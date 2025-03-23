@@ -42,7 +42,13 @@ jobs:
           $RUNNER json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
           [ ! -d "node_modules" ] && $MANAGER install --frozen-lockfile
           [[ "$BUILD" = "true" ]] && $MANAGER run build
-          [[ "$MANAGER" = "bun" ]] && npm publish --provenance --access public --no-git-checks --tag $TAG || $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
+
+          # Publish package
+          if [ "$MANAGER" = "bun" ]; then
+            npm publish --provenance --access public --no-git-checks --tag $TAG
+          else
+            $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
+          fi
         env:
           TAG: canary
           MANAGER: bun
