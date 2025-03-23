@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: lts/*
-          registry-url: https://registry.npmjs.org
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -34,11 +33,6 @@ jobs:
 
       - name: Release Package
         run: |
-          TAG="canary"
-          MANAGER="bun"
-          RUNNER="bunx"
-          BUILD="true"
-
           PACKAGE_NAME=$($RUNNER json -f package.json -a name)
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
           LATEST_VERSION=$(echo $VERSIONS | $RUNNER json latest)
@@ -50,4 +44,9 @@ jobs:
           [[ "$BUILD" = "true" ]] && $MANAGER run build
           [[ "$MANAGER" = "bun" ]] && npm publish --provenance --access public --no-git-checks --tag $TAG || $MANAGER publish --provenance --access public --no-git-checks --tag $TAG
         env:
+          TAG: canary
+          MANAGER: bun
+          RUNNER: bunx
+          BUILD: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_REGISTRY: https://registry.npmjs.org
