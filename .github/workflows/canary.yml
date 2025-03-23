@@ -54,7 +54,7 @@ jobs:
           # fi
         env:
           TAG: canary
+          BUILD: true
           MANAGER: bun
           RUNNER: bunx
-          BUILD: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
