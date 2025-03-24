@@ -3,7 +3,7 @@ name: Release Package
 on:
   push:
     branches:
-      - main
+      - "**"
   issue_comment:
     types: [created]
 
@@ -47,6 +47,10 @@ jobs:
       - name: Release Package
         run: |
           PACKAGE_NAME=$(bunx json -f package.json -a name)
+          npm view "$PACKAGE_NAME" 2>/dev/null || {
+            echo "$PACKAGE_NAME does not exist in the npm registry. Skipping publish."
+            exit 0
+          }
           PACKAGE_VERSION=$(bunx json -f package.json -a version)
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
           LATEST_VERSION=$(echo $VERSIONS | bunx json latest)
