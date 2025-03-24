@@ -32,7 +32,7 @@ jobs:
           bun update
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git pull
+          git pull --rebase
           git add .
           git commit -m "chore(deps): update dependencies"
           git push -u origin HEAD:refs/heads/update-dependencies
