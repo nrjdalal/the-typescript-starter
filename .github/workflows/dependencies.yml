@@ -37,5 +37,11 @@ jobs:
           git add package.json bun.lock
           git commit -m "chore(deps): update dependencies" || true
           git push -f origin update-dependencies
-          curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
+          PR_URL=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=$GITHUB_REPOSITORY:update-dependencies" | grep -o '"url": *"[^"]*' | grep -o '[^"]*$')
+          if [ -z "$PR_URL" ]; then
+            curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
             -d "{\"title\":\"chore(deps): update dependencies\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
+          else
+            curl -sL -X PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL" \
+            -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"Updated dependencies.\"}"
+          fi
