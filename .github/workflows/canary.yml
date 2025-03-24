@@ -51,7 +51,7 @@ jobs:
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
           LATEST_VERSION=$(echo $VERSIONS | bunx json latest)
           if [[ $GITHUB_EVENT_NAME == 'issue_comment' ]]; then
-            TAG="pr"
+            TAG="test"
             RELEASE_VERSION="0.0.0-$(openssl rand -hex 6)"
           elif [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
             RELEASE_VERSION=$PACKAGE_VERSION
