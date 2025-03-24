@@ -33,9 +33,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git pull --rebase
+          git checkout -b update-dependencies
           git add .
           git commit -m "chore(deps): update dependencies"
-          git push -u origin HEAD:refs/heads/update-dependencies
+          git push origin update-dependencies
           gh pr create --title "chore(deps): update dependencies" --body "This PR updates the dependencies to their latest versions." --head update-dependencies --base main
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
