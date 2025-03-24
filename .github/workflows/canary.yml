@@ -1,4 +1,4 @@
-name: NPM Release Canary
+name: Release Package
 
 on:
   push:
@@ -19,7 +19,7 @@ permissions:
 
 jobs:
   release:
-    if: github.event_name == 'push' || (github.event_name == 'issue_comment' && contains(github.event.comment.body, 'release'))
+    if: github.event_name == 'push' || (github.event_name == 'issue_comment' && github.event.comment.user.type == 'Owner' && contains(github.event.comment.body, 'release'))
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
