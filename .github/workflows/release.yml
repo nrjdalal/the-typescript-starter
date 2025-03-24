@@ -7,7 +7,7 @@ on:
   issue_comment:
     types: [created]
   pull_request:
-    types: [opened]
+    types: [opened, synchronize, reopened]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
