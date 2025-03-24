@@ -50,7 +50,6 @@ jobs:
             else
               TAG="latest"
             fi
-            TAG="latest"
           else
             NEXT_VERSION=$(nlx semver $LATEST_VERSION -i minor)
             TAGGED_VERSION=$(echo $VERSIONS | nlx json $TAG)
