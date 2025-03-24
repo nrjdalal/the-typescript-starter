@@ -75,8 +75,7 @@ jobs:
             # Add release comment to PR
             PR_NUMBER=$(echo "${{ github.event.issue.pull_request.url }}" | grep -o '[0-9]*$')
             curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
-              -d "{\"body\": \"Package released - [\`$PACKAGE_NAME@$RELEASE_VERSION\`]($PACKAGE_URL)\"}" >/dev/null
-              # && echo "🟢 Release comment added to PR!" || echo "🔴 Failed to add release comment to PR."
+              -d "{\"body\": \"Package released - [\`$PACKAGE_NAME@$RELEASE_VERSION\`]($PACKAGE_URL)\"}"
           fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
