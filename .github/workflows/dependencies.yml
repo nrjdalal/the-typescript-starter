@@ -34,7 +34,7 @@ jobs:
           git checkout update-dependencies || git checkout -b update-dependencies
           bun update
           git add .
-          git commit -m "chore(deps): update dependencies"
+          git commit -m "chore(deps): update dependencies" || exit 0
           git push origin update-dependencies
           curl -fsSL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
             -d "{\"title\":\"chore(deps): update dependencies\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
