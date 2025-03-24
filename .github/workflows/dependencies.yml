@@ -34,6 +34,7 @@ jobs:
           git pull origin main
           git checkout -B update-dependencies
           UPDATED_DEPENDENCIES=$(bunx taze -w)
+          echo "$UPDATED_DEPENDENCIES"
           git add package.json bun.lock
           git commit -m "chore(deps): update dependencies" || true
           git push -f origin update-dependencies
