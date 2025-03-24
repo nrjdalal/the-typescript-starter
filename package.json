@@ -24,8 +24,7 @@
     "build": "tsup",
     "cli": "bun run build && node dist/bin/index.js",
     "dev": "tsup --watch",
-    "prepare": "simple-git-hooks",
-    "publish:latest": "NODE_ENV=production changeset publish"
+    "prepare": "simple-git-hooks"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
