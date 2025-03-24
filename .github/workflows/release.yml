@@ -6,6 +6,8 @@ on:
       - "**"
   issue_comment:
     types: [created]
+  pull_request:
+    types: [opened]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
@@ -26,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.commits.id || github.sha }}
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
