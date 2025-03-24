@@ -31,9 +31,8 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git branch -D update-dependencies || true
-          git checkout -b update-dependencies
-          git pull origin main
+          git checkout update-dependencies || git checkout -b update-dependencies
+          git pull origin main --rebase
           bun update
           git add .
           git commit -m "chore(deps): update dependencies" || exit 0
