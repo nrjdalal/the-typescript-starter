@@ -62,6 +62,7 @@ jobs:
           fi
 
           bunx json -I -f package.json -e "this.version=\"$RELEASE_VERSION\""
+
           bun install --frozen-lockfile
           bun run build
           npm publish --provenance --access public --no-git-checks --tag $TAG
