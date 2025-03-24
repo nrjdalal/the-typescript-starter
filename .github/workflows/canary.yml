@@ -50,12 +50,15 @@ jobs:
           PACKAGE_VERSION=$(bunx json -f package.json -a version)
           VERSIONS=$(npm view $PACKAGE_NAME dist-tags --json)
           LATEST_VERSION=$(echo $VERSIONS | bunx json latest)
-          if [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
+          if [[ $GITHUB_EVENT_NAME == 'issue_comment' ]]; then
+            TAG="canary"
+            RELEASE_VERSION="0.0.0-${GITHUB_SHA:0:7}"
+          elif [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
             RELEASE_VERSION=$PACKAGE_VERSION
             HAS_TAG=$(echo $PACKAGE_VERSION | grep -o '[a-zA-Z]*' | head -n 1)
             TAG=$([[ -n "$HAS_TAG" ]] && echo $HAS_TAG || echo "latest")
           else
-            TAG=$([[ $GITHUB_EVENT_NAME == 'issue_comment' ]] && echo "pr" || echo "canary")
+            TAG="canary"
             RELEASE_VERSION=$(bunx semver $LATEST_VERSION -i minor)
             TAGGED_VERSION=$(echo $VERSIONS | bunx json $TAG)
             RELEASE_VERSION=$([[ $TAGGED_VERSION == $RELEASE_VERSION* ]] && bunx semver $TAGGED_VERSION -i prerelease || echo $RELEASE_VERSION-$TAG.0)
