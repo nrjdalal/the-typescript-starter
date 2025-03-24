@@ -34,6 +34,12 @@ jobs:
         with:
           bun-version: latest
 
+      - name: Install Dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build Package
+        run: bun run build
+
       - name: Release Package
         run: |
           npm i -g @antfu/ni
@@ -52,9 +58,6 @@ jobs:
             NEXT_VERSION=$([[ $TAGGED_VERSION == $NEXT_VERSION* ]] && nlx semver $TAGGED_VERSION -i prerelease || echo $NEXT_VERSION-$TAG.0)
           fi
           nlx json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
-          [ ! -d "node_modules" ] && ni --frozen
-          [[ "$BUILD" = "true" ]] && nr build
           npm publish --provenance --access public --no-git-checks --tag $TAG
         env:
-          BUILD: true
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
