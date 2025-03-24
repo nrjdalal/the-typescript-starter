@@ -74,7 +74,7 @@ jobs:
             curl -fsSL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/issues/$PR_NUMBER/comments" \
               -d "{\"body\": \"Test package released - [\`$PACKAGE_NAME@$RELEASE_VERSION\`]($PACKAGE_URL)\"}" >/dev/null \
               && echo "🟢 Release comment to PR added!" || echo "🔴 Failed to add release comment to PR."
-          elif [[ $GITHUB_EVENT_NAME == 'push' ]]; then
+          else
             curl -fsSL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/commits/$GITHUB_SHA/comments" \
               -d "{\"body\": \"Package released - [\`$PACKAGE_NAME@$RELEASE_VERSION\`]($PACKAGE_URL)\"}" >/dev/null \
               && echo "🟢 Release comment added!" || echo "🔴 Failed to add release comment."
