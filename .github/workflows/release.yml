@@ -47,9 +47,9 @@ jobs:
           LATEST_VERSION=$(echo $VERSIONS | bunx json latest)
           if [[ $GITHUB_EVENT_NAME == 'issue_comment' ]]; then
             PR_NUMBER=$(echo "${{ github.event.issue.pull_request.url }}" | grep -o '[0-9]*$')
-            git checkout $(curl -fsSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" | bunx json -a -1 sha)
+            SHA=$(git checkout $(curl -fsSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/commits" | bunx json -a -1 sha)
             TAG="test"
-            RELEASE_VERSION="0.0.0-$(openssl rand -hex 7)"
+            RELEASE_VERSION="0.0.0-$SHA"
           elif [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
             RELEASE_VERSION=$PACKAGE_VERSION
             HAS_TAG=$(echo $PACKAGE_VERSION | grep -o '[a-zA-Z]*' | head -n 1)
