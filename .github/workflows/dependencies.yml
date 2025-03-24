@@ -40,5 +40,5 @@ jobs:
           git push -f origin update-dependencies
           IS_EXISTING=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | npx json -a head.ref | grep "update-dependencies" | xargs)
           if [[ -z $IS_EXISTING ]]; then
-            curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{"title":"chore(deps): update dependencies","head":"update-dependencies","base":"main"}' "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
+            curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" -X POST -d '{"title":"chore(deps): update dependencies","head":"update-dependencies","base":"main", "body":"'"$UPDATED_DEPENDENCIES"'"}' "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls"
           fi
