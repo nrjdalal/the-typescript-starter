@@ -37,9 +37,12 @@ jobs:
           git add package.json bun.lock
           git commit -m "chore(deps): update dependencies" || true
           git push -f origin update-dependencies
-          IS_EXISTING=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | bunx json -a html_url)
-          echo $IS_EXISTING
-          if [[ -z $IS_EXISTING ]]; then
+          PR_URL=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | bunx json -a html_url)
+          echo $PR_URL
+          if [[ -z $PR_URL ]]; then
             curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"  "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
-              -d "{\"title\": \"chore(deps): update dependencies\", \"head\": \"update-dependencies\", \"base\": \"main\", \"body\": \"This PR updates the dependencies.\"}"
+              -d "{\"title\": \"chore(deps): update dependencies\", \"head\": \"update-dependencies\", \"base\": \"main\", \"body\": \"Automatically generated PR to update dependencies.\"}"
+          else
+            curl -sL -X PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL" \
+              -d "{\"title\": \"chore(deps): update dependencies\", \"body\": \"Automatically updated PR to update dependencies.\"}"
           fi
