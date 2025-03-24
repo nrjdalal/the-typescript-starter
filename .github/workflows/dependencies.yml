@@ -41,5 +41,5 @@ jobs:
           IS_EXISTING=$(curl -sL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | bunx json -a head.ref | grep "update-dependencies" | xargs)
           if [[ -z $IS_EXISTING ]]; then
             curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"  "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
-              -d "$(echo '{"title":"chore(deps): update dependencies","head":"update-dependencies","base":"main"}' | json -e "this.body=$UPDATED_DEPENDENCIES")"
+              -d "$(echo '{"title":"chore(deps): update dependencies","head":"update-dependencies","base":"main"}' | bunx json -e "this.body=$UPDATED_DEPENDENCIES")"
           fi
