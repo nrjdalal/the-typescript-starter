@@ -43,6 +43,7 @@ jobs:
 
           if [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
             NEXT_VERSION=$PACKAGE_VERSION
+            TAG="latest"
           else
             NEXT_VERSION=$(nlx semver $LATEST_VERSION -i minor)
             TAGGED_VERSION=$(echo $VERSIONS | nlx json $TAG)
