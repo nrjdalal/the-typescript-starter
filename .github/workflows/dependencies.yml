@@ -36,3 +36,5 @@ jobs:
           git commit -m "chore(deps): update dependencies"
           git push -u origin HEAD:refs/heads/update-dependencies
           gh pr create --title "chore(deps): update dependencies" --body "This PR updates the dependencies to their latest versions." --head update-dependencies --base main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
