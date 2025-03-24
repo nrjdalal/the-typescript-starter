@@ -30,6 +30,8 @@ jobs:
       - name: Update Dependencies
         run: |
           bun update
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
           git pull
           git add .
           git commit -m "chore(deps): update dependencies"
