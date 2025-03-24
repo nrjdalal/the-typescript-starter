@@ -33,7 +33,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           git pull origin main
           git checkout -B update-dependencies
-          bun update
+          UPDATED_DEPENDENCIES=$(bunx taze -w)
           git add package.json bun.lock
           git commit -m "chore(deps): update dependencies" || true
           git push -f origin update-dependencies
@@ -43,5 +43,5 @@ jobs:
               -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"Updated dependencies\",\"state\":\"open\"}"
           else
             curl -fsSL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
-              -d "{\"title\":\"chore(deps): update dependencies\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
+              -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"$UPDATED_DEPENDENCIES\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
           fi
