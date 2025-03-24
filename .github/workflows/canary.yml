@@ -45,6 +45,11 @@ jobs:
 
           if [[ $PACKAGE_VERSION != $LATEST_VERSION ]]; then
             NEXT_VERSION=$PACKAGE_VERSION
+            if [[ $PACKAGE_VERSION =~ [a-zA-Z] ]]; then
+              TAG=$(echo $PACKAGE_VERSION | grep -o '[a-zA-Z]*' | head -n 1)
+            else
+              TAG="latest"
+            fi
             TAG="latest"
           else
             NEXT_VERSION=$(nlx semver $LATEST_VERSION -i minor)
