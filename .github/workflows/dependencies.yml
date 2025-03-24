@@ -37,11 +37,12 @@ jobs:
           git add package.json bun.lock
           git commit -m "chore(deps): update dependencies" || true
           git push -f origin update-dependencies
-          PR_URL=$(curl -fsSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | bunx json -a html_url | head -n 1 || echo "null")
-          if [ "$PR_URL" != "null" ]; then
-            curl -sL -X PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL" \
-              -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"Updated dependencies\",\"state\":\"open\"}"
-          else
-            curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
-              -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"$UPDATED_DEPENDENCIES\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
-          fi
+          curl -fsSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies"
+          # PR_URL=$(curl -fsSL -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=update-dependencies" | bunx json -a html_url | head -n 1 || echo "null")
+          # if [ "$PR_URL" != "null" ]; then
+          #   curl -sL -X PATCH -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "$PR_URL" \
+          #     -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"Updated dependencies\",\"state\":\"open\"}"
+          # else
+          #   curl -sL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
+          #     -d "{\"title\":\"chore(deps): update dependencies\",\"body\":\"$UPDATED_DEPENDENCIES\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
+          # fi
