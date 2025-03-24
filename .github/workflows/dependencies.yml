@@ -36,6 +36,8 @@ jobs:
           git add .
           git commit -m "chore(deps): update dependencies"
           git push origin update-dependencies
-          gh pr create --title "chore(deps): update dependencies" --body "This PR updates the dependencies to their latest versions." --head update-dependencies --base main
+          curl -fsSL -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls" \
+            -H "Accept: application/vnd.github.v3+json" \
+            -d "{\"title\":\"chore(deps): update dependencies\",\"head\":\"update-dependencies\",\"base\":\"main\"}"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
