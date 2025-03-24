@@ -47,7 +47,7 @@ jobs:
           else
             NEXT_VERSION=$(nlx semver $LATEST_VERSION -i minor)
             TAGGED_VERSION=$(echo $VERSIONS | nlx json $TAG)
-            NEXT_VERSION=$(if [[ $TAGGED_VERSION == $NEXT_VERSION* ]]; then nlx semver $TAGGED_VERSION -i prerelease; else echo $NEXT_VERSION-$TAG.0; fi)
+            NEXT_VERSION=$([[ $TAGGED_VERSION == $NEXT_VERSION* ]] && nlx semver $TAGGED_VERSION -i prerelease || echo $NEXT_VERSION-$TAG.0)
           fi
           nlx json -I -f package.json -e "this.version=\"$NEXT_VERSION\""
           [ ! -d "node_modules" ] && ni --frozen
