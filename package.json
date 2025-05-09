@@ -21,10 +21,10 @@
     "dist"
   ],
   "scripts": {
+    "bin": "tsup && node dist/bin/index.js",
     "build": "tsup",
-    "cli": "bun run build && node dist/bin/index.js",
     "dev": "tsup --watch",
-    "prepare": "simple-git-hooks"
+    "prepare": "npx simple-git-hooks"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
