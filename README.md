@@ -12,7 +12,7 @@ npx fx '({
   ...this,
   scripts: {
     ...this.scripts,
-    "dev": "tsup && concurrently \"tsup --watch\" \"nodemon dist/index.js\""
+    "dev": "tsup && concurrently \"tsup --watch\" \"nodemon dist/index.mjs\""
   }
 })' package.json >package.tmp.json && mv package.tmp.json package.json
 ```
