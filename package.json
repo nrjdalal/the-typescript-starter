@@ -17,7 +17,7 @@
   "exports": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "bin": {
-    "index": "./dist/bin/index.mjs"
+    "the-typescript-starter": "./dist/bin/index.mjs"
   },
   "files": [
     "dist"
