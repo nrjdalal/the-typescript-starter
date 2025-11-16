@@ -16,9 +16,7 @@
   "type": "module",
   "exports": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "bin": {
-    "the-typescript-starter": "./dist/bin/index.mjs"
-  },
+  "bin": "./dist/bin/index.mjs",
   "files": [
     "dist"
   ],
