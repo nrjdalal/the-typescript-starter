@@ -1,6 +1,6 @@
 {
   "name": "the-typescript-starter",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "the-typescript-starter",
   "keywords": [],
   "homepage": "https://github.com/nrjdalal/the-typescript-starter#readme",
@@ -16,7 +16,9 @@
   "type": "module",
   "exports": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
-  "bin": "./dist/bin/index.mjs",
+  "bin": {
+    "index": "./dist/bin/index.mjs"
+  },
   "files": [
     "dist"
   ],
@@ -37,7 +39,7 @@
   },
   "lint-staged": {
     "*": "prettier --write --ignore-unknown",
-    "package.mjson": "sort-package-json"
+    "package.json": "sort-package-json"
   },
   "prettier": {
     "plugins": [
